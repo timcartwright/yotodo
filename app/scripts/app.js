@@ -1,4 +1,6 @@
 'use strict';
+ 
+Parse.initialize("YxGFgDmkRXgIxyzpBOtfrzIRoK4EMa3lUWOsRaIp", "oRn25pSjNAATtKkZQt3G37yQ9CO1Xgf0cTg5rIE8");
 
 /**
  * @ngdoc overview
@@ -16,13 +18,12 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'ui.sortable',
-    'LocalStorageModule'
+    'ui.sortable'
   ])
-  
-  .config(['localStorageServiceProvider', function(localStorageServiceProvider){
-    localStorageServiceProvider.setPrefix('ls');
-  }])
+
+  // .config(['localStorageServiceProvider', function(localStorageServiceProvider){
+  //   localStorageServiceProvider.setPrefix('ls');
+  // }])
 
   .config(function ($routeProvider) {
     $routeProvider

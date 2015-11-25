@@ -8,21 +8,59 @@
  * Controller of the todoApp
  */
 angular.module('todoApp')
-  .controller('MainCtrl', function ($scope, localStorageService) {
+  .controller('MainCtrl', function ($q) {
 
-    var todosInStore = localStorageService.get('todos');
-    $scope.todos = todosInStore || [];
+    var main = this;
 
-    $scope.$watch('todos', function () {
-      localStorageService.set('todos', $scope.todos);
-    }, true);
+    var getItemsFromParse = function() {
 
-    $scope.addTodo = function() {
-      $scope.todos.push($scope.todo);
-      $scope.todo = '';
+      var ToDoList = Parse.Object.extend("Task");
+      var deffered = $q.defer();
+      var query = new Parse.Query(ToDoList);
+      query.find({
+        success: function(data) {
+          deffered.resolve(data);
+          console.log("got em");
+        },
+        error: function(error) {
+          deffered.reject(error);
+          console.log("bugger");
+        }
+      });
+
+      return deffered.promise;
+        
     };
 
-    $scope.removeTodo = function(index) {
-      $scope.todos.splice(index, 1);
+    getItemsFromParse()
+      .then(function(data) {
+        main.todos = [];
+        for(var i=0; i < data.length; i++) {
+          main.todos.push(data[i].get("task"));
+        };
+      }, function(error) {
+        console.log("bugger");
+      });
+
+
+    main.addTodo = function() {
+
+      var task = Parse.Object.extend("Task");
+      var newTask = new task();
+      newTask.set("task", main.todo);
+  
+      newTask.save(null, {
+        success: function(newTask) {
+          console.log('Saved');
+        },
+        error: function(newTask, error) {
+          alert('Failed to create new object, with error code: ' + error.message);
+        }
+      });
+
+    };
+
+    main.removeTodo = function(index) {
+      main.todos.splice(index, 1);
     };
   });
