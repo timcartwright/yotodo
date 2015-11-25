@@ -31,6 +31,14 @@ module.exports = function (grunt) {
     // Project settings
     yeoman: appConfig,
 
+    // Publish to Github Pages
+    'gh-pages': {
+      options: {
+        base: 'dist'
+      },
+      src: ['**']
+    },
+
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       bower: {
@@ -480,4 +488,6 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
+
+  grunt.loadNpmTasks('grunt-gh-pages');
 };
